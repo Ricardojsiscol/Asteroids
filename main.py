@@ -1,3 +1,5 @@
+import sys
+
 import pygame
 
 from asteroid import Asteroid
@@ -14,6 +16,8 @@ def main():
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     color = (0,0,0)
     clock = pygame.time.Clock()
+    font = pygame.font.Font(None, 36)
+    game_over_text = font.render("Game Over!", True, (255,255,255))
 
     updatable = pygame.sprite.Group()
     drawable = pygame.sprite.Group()
@@ -36,6 +40,12 @@ def main():
 
         for sprite in drawable:
             sprite.draw(screen)
+        for asteroid in asteroids:
+            if asteroid.check_collision(player):
+                screen.blit(game_over_text, (SCREEN_WIDTH/2, SCREEN_HEIGHT/2))
+                pygame.display.flip()
+                pygame.time.wait(2000)
+                sys.exit()
 
         pygame.display.flip()
         dt = clock.tick(60)/1000
